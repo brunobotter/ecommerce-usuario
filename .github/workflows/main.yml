@@ -67,20 +67,19 @@ jobs:
 
     - name: Fill in the new image ID in the ECS Task definition
       id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: usuario-task-definition.json
-          container-name: ecommerce-usuario
-          image: ${{ steps.build-image.outputs.image }}    
-        
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: usuario-task-definition.json
+        container-name: ecommerce-usuario
+        image: ${{ steps.build-image.outputs.image }}    
 
     - name: Deploy ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: e-commerce-usuario-service
-          cluster: e-commerce-producao
-          wait-for-service-stability: true
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: e-commerce-usuario-service
+        cluster: e-commerce-producao
+        wait-for-service-stability: true
       env:
         AWS_ACCESS_KEY_ID: {{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: {{ secrets.AWS_SECRET_ACCESS_KEY }}
