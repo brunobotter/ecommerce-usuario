@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]  
 
-env:
+#env:
   #SNYK_TOKEN: {{}}
   #ECR_IMAGE: {{ vars.ECR_IMAGE}}
   #AWS_DEFAULT_REGION: {{ vars.AWS_DEFAULT_REGION}}
