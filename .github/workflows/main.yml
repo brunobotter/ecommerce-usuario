@@ -37,6 +37,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: 'ecommerce-carrinho'
         IMAGE_TAG: ${{ github.run_number }}
       run: |
         # Build a docker container and push it to a ECR so can be deployed to ECS
