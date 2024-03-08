@@ -37,7 +37,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: 'ecommerce-carrinho'
+        ECR_REPOSITORY: 'ecommerce-usuario'
         IMAGE_TAG: ${{ github.run_number }}
       run: |
         # Build a docker container and push it to a ECR so can be deployed to ECS
@@ -57,8 +57,8 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: e-commerce-usuario-service
-        cluster: e-commerce-producao
+        service: ecommerce-usuario
+        cluster: comercio-virtual
         wait-for-service-stability: true
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

@@ -1,17 +1,15 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:975050013302:task-definition/task-definition:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:975050013302:task-definition/comercio-virtual-usuario:1",
     "containerDefinitions": [
         {
             "name": "ecommerce-usuario",
             "image": "975050013302.dkr.ecr.us-east-1.amazonaws.com/ecommerce-usuario:latest",
-            "cpu": 1024,
-            "memory": 3072,
-            "memoryReservation": 1024,
+            "cpu": 0,
             "portMappings": [
                 {
-                    "name": "ecommerce-usuario-5000-tcp",
-                    "containerPort": 5000,
-                    "hostPort": 5000,
+                    "name": "ecommerce-usuario-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
                     "protocol": "tcp",
                     "appProtocol": "http"
                 }
@@ -26,22 +24,16 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/task-definition",
+                    "awslogs-group": "/ecs/comercio-virtual-usuario",
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
                 },
                 "secretOptions": []
             },
-            "systemControls": [],
-            "resourceRequirements": [
-                {
-                    "value": "0",
-                    "type": "GPU"
-                }
-            ]
+            "systemControls": []
         }
     ],
-    "family": "task-definition",
+    "family": "comercio-virtual-usuario",
     "taskRoleArn": "arn:aws:iam::975050013302:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::975050013302:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
@@ -62,9 +54,6 @@
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
         },
         {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
-        },
-        {
             "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
@@ -82,10 +71,11 @@
     ],
     "placementConstraints": [],
     "compatibilities": [
-        "EC2"
+        "EC2",
+        "FARGATE"
     ],
     "requiresCompatibilities": [
-        "EC2"
+        "FARGATE"
     ],
     "cpu": "1024",
     "memory": "3072",
@@ -93,7 +83,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-03-08T19:11:30.850Z",
+    "registeredAt": "2024-03-08T19:40:03.703Z",
     "registeredBy": "arn:aws:iam::975050013302:user/bruno",
     "tags": []
 }
