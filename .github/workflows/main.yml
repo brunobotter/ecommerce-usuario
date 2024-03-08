@@ -6,13 +6,6 @@ on:
   pull_request:
     branches: [main]  
 
-#env:
-  #SNYK_TOKEN: {{}}
-  #ECR_IMAGE: {{ vars.ECR_IMAGE}}
-  #AWS_DEFAULT_REGION: {{ vars.AWS_DEFAULT_REGION}}
-  #ECS_CLUSTER: {{vars.ECS_CLUSTER}}
-  #ECS_BACKEND_SERVICE: {{ vars.ECS_BACKEND_SERVICE}}
-
 jobs:
   build:
     runs-on: ubunto-latest
@@ -26,20 +19,6 @@ jobs:
 
     - name: Build
       run: go build -v ./...
-
- # security:
- ##   runs-on: ubunto-20.04
- #   steps:
- #   - uses: actions/checkout@master
-  #  - name: Run synk docker
-   #   uses: snyk/actions/docker@master
-   #   env:
-   #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN}}   
-   # - name: Run synk golang
-      #uses: snyk/actions/golang@master
-      #env:
-        #SNYK_TOKEN: ${{ secrets.SNYK_TOKEN}}   
-    # inserir check de testes
 
     - name: Configure Aws Credentials
       uses: aws-actions/configure-aws-credentials@v3
