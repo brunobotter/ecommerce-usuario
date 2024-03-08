@@ -7,11 +7,11 @@ on:
     branches: [main]  
 
 env:
-  SNYK_TOKEN: {{}}
-  ECR_IMAGE: {{ vars.ECR_IMAGE}}
-  AWS_DEFAULT_REGION: {{ vars.AWS_DEFAULT_REGION}}
-  ECS_CLUSTER: {{vars.ECS_CLUSTER}}
-  ECS_BACKEND_SERVICE: {{ vars.ECS_BACKEND_SERVICE}}
+  #SNYK_TOKEN: {{}}
+  #ECR_IMAGE: {{ vars.ECR_IMAGE}}
+  #AWS_DEFAULT_REGION: {{ vars.AWS_DEFAULT_REGION}}
+  #ECS_CLUSTER: {{vars.ECS_CLUSTER}}
+  #ECS_BACKEND_SERVICE: {{ vars.ECS_BACKEND_SERVICE}}
 
 jobs:
   build:
