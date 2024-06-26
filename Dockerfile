@@ -6,6 +6,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod vendor -o ecommerce-usua
 
 FROM scratch
 COPY --from=builder /app/ecommerce-usuario /ecommerce-usuario
-EXPOSE 5000
+EXPOSE 8080
 ENTRYPOINT ["/ecommerce-usuario"]
 

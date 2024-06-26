@@ -1,10 +1,22 @@
 package main
 
-import "net/http"
+import (
+	"github.com/brunobotter/ecommerce-usuario/config"
+	"github.com/brunobotter/ecommerce-usuario/router"
+)
+
+var (
+	logger *config.Logger
+)
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("<h1>Usuario</h1>"))
-	})
-	http.ListenAndServe(":5000", nil)
+	logger = config.GetLogger("main")
+	//initialize configs
+	err := config.Init()
+	if err != nil {
+		logger.Errorf("config initializate error: %v", err)
+		return
+	}
+	//initialize router
+	router.Initialize()
 }
