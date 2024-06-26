@@ -69,5 +69,5 @@ jobs:
       run: |
         echo "DB_USER=admin" >> $GITHUB_ENV
         echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-        echo "DB_HOST=database-1.cfwgqgmc8vat.us-east-1.rds.amazonaws.com" >> $GITHUB_ENV
+        echo "DB_HOST=produto.cfwgqgmc8vat.us-east-1.rds.amazonaws.com" >> $GITHUB_ENV
         echo "DB_NAME=produto" >> $GITHUB_ENV
