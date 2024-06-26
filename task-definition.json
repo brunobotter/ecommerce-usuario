@@ -1,15 +1,15 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:975050013302:task-definition/comercio-virtual-usuario:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:730335442778:task-definition/ecommerce-usuario:1",
     "containerDefinitions": [
         {
             "name": "ecommerce-usuario",
-            "image": "975050013302.dkr.ecr.us-east-1.amazonaws.com/ecommerce-usuario:latest",
+            "image": "730335442778.dkr.ecr.us-east-1.amazonaws.com/ecommerce-usuario",
             "cpu": 0,
             "portMappings": [
                 {
-                    "name": "ecommerce-usuario-80-tcp",
-                    "containerPort": 80,
-                    "hostPort": 80,
+                    "name": "8080",
+                    "containerPort": 8080,
+                    "hostPort": 8080,
                     "protocol": "tcp",
                     "appProtocol": "http"
                 }
@@ -23,8 +23,8 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
+                    "awslogs-group": "/ecs/ecommerce-usuario",
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/comercio-virtual-usuario",
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -33,9 +33,8 @@
             "systemControls": []
         }
     ],
-    "family": "comercio-virtual-usuario",
-    "taskRoleArn": "arn:aws:iam::975050013302:role/ecsTaskExecutionRole",
-    "executionRoleArn": "arn:aws:iam::975050013302:role/ecsTaskExecutionRole",
+    "family": "ecommerce-usuario",
+    "executionRoleArn": "arn:aws:iam::730335442778:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "revision": 1,
     "volumes": [],
@@ -52,9 +51,6 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
             "name": "ecs.capability.execution-role-ecr-pull"
@@ -83,7 +79,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-03-08T19:40:03.703Z",
-    "registeredBy": "arn:aws:iam::975050013302:user/bruno",
+    "registeredAt": "2024-06-26T22:15:13.238Z",
+    "registeredBy": "arn:aws:iam::730335442778:user/teste",
     "tags": []
 }
