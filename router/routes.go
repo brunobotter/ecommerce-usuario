@@ -9,6 +9,7 @@ func initializeRoutes(router *gin.Engine) {
 	handler.InitializeHandler()
 	v1 := router.Group("/api/v1")
 	{
+		v1.GET("/health", handler.HealthCheck)
 		v1.GET("/usuario/:id", handler.ShowUsuarioHandler)
 		v1.GET("/usuarios", handler.ListUsuairoHandler)
 		v1.POST("/usuario", handler.CreateUsuarioHandler)

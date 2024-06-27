@@ -54,6 +54,12 @@ func ListUsuairoHandler(ctx *gin.Context) {
 	vo.SendSuccess(ctx, "list-usuarios", usuarios)
 }
 
+func HealthCheck(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"status": "OK",
+	})
+}
+
 func ShowUsuarioHandler(ctx *gin.Context) {
 	id := ctx.Param("id")
 	logger.Debugf("id %s", id)
