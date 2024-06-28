@@ -16,7 +16,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      CidrBlock: 10.0.3.0/24  # Mudança do CIDR block
+      CidrBlock: 10.0.3.0/24
       MapPublicIpOnLaunch: true
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       Tags:
@@ -27,7 +27,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      CidrBlock: 10.0.4.0/24  # Mudança do CIDR block
+      CidrBlock: 10.0.4.0/24
       MapPublicIpOnLaunch: true
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       Tags:
@@ -78,7 +78,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Sub "${AWS::StackName}-ecs-cluster"
+      ClusterName: carrinho-virtual
 
   ECSTaskExecutionRole:
     Type: AWS::IAM::Role
@@ -103,6 +103,13 @@ Resources:
                   - ecr:GetAuthorizationToken
                   - logs:CreateLogStream
                   - logs:PutLogEvents
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                  - logs:PutLogEvents
+                  - logs:GetLogEvents
+                  - logs:FilterLogEvents
                   - s3:GetObject
                 Resource: "*"
 
@@ -118,11 +125,17 @@ Resources:
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
         - Name: my-container
-          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/ecommerce-usuario:latest" # Use a URI correta da imagem
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/ecommerce-usuario:latest"
           Essential: true
           PortMappings:
             - ContainerPort: 8080
               Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: /ecs/ecommerce-usuario
+              awslogs-region: us-east-1
+              awslogs-stream-prefix: ecs        
 
   ECSService:
     Type: AWS::ECS::Service
@@ -177,6 +190,10 @@ Resources:
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0         
 
   ECSTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -186,7 +203,7 @@ Resources:
       Protocol: HTTP
       TargetType: ip
       HealthCheckIntervalSeconds: 30
-      HealthCheckPath: /
+      HealthCheckPath: /api/v1/health
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 5
@@ -198,7 +215,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       LoadBalancerArn: !Ref LoadBalancer
-      Port: 80
+      Port: 8080
       Protocol: HTTP
       DefaultActions:
         - Type: forward
@@ -209,24 +226,102 @@ Resources:
     Properties:
       Name: !Sub "${AWS::StackName}-api"
 
-  ApiGatewayResource:
+  ApiGatewayResourceService:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
       PathPart: service
       RestApiId: !Ref ApiGatewayRestApi
 
-  ApiGatewayMethod:
+  ApiGatewayResourceUsuario:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ApiGatewayResourceService
+      PathPart: usuario
+      RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayResourceUsuarioId:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ApiGatewayResourceUsuario
+      PathPart: "{id}"
+      RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayMethodGetUsuario:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
-      HttpMethod: ANY
-      ResourceId: !Ref ApiGatewayResource
+      HttpMethod: GET
+      ResourceId: !Ref ApiGatewayResourceUsuarioId
       RestApiId: !Ref ApiGatewayRestApi
       Integration:
-        IntegrationHttpMethod: ANY
+        IntegrationHttpMethod: GET
         Type: HTTP_PROXY
-        Uri: !Sub "http://${LoadBalancer.DNSName}:8080/"
+        Uri: !Sub "http://${LoadBalancer.DNSName}:8080/api/v1/usuario/{id}"
+        IntegrationResponses:
+          - StatusCode: 200
+      MethodResponses:
+        - StatusCode: 200
+
+  ApiGatewayMethodPostUsuario:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: POST
+      ResourceId: !Ref ApiGatewayResourceUsuario
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: HTTP_PROXY
+        Uri: !Sub "http://${LoadBalancer.DNSName}:8080/api/v1/usuario"
+        IntegrationResponses:
+          - StatusCode: 200
+      MethodResponses:
+        - StatusCode: 200
+
+  ApiGatewayMethodDeleteUsuario:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: DELETE
+      ResourceId: !Ref ApiGatewayResourceUsuarioId
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: DELETE
+        Type: HTTP_PROXY
+        Uri: !Sub "http://${LoadBalancer.DNSName}:8080/api/v1/usuario/{id}"
+        IntegrationResponses:
+          - StatusCode: 200
+      MethodResponses:
+        - StatusCode: 200
+
+  ApiGatewayMethodPutUsuario:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: PUT
+      ResourceId: !Ref ApiGatewayResourceUsuarioId
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: PUT
+        Type: HTTP_PROXY
+        Uri: !Sub "http://${LoadBalancer.DNSName}:8080/api/v1/usuario/{id}"
+        IntegrationResponses:
+          - StatusCode: 200
+      MethodResponses:
+        - StatusCode: 200
+
+  ApiGatewayMethodGetUsuarios:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      ResourceId: !Ref ApiGatewayResourceService
+      RestApiId: !Ref ApiGatewayRestApi
+      Integration:
+        IntegrationHttpMethod: GET
+        Type: HTTP_PROXY
+        Uri: !Sub "http://${LoadBalancer.DNSName}:8080/api/v1/usuarios"
         IntegrationResponses:
           - StatusCode: 200
       MethodResponses:
@@ -234,7 +329,12 @@ Resources:
 
   ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
-    DependsOn: ApiGatewayMethod
+    DependsOn: 
+      - ApiGatewayMethodGetUsuario
+      - ApiGatewayMethodPostUsuario
+      - ApiGatewayMethodPutUsuario
+      - ApiGatewayMethodDeleteUsuario
+      - ApiGatewayMethodGetUsuarios
     Properties:
       RestApiId: !Ref ApiGatewayRestApi
       StageName: prod
@@ -246,3 +346,4 @@ Outputs:
   ApiGatewayUrl:
     Description: URL of the API Gateway
     Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/service"
+
