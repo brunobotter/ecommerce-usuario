@@ -1,39 +1,49 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:730335442778:task-definition/ecommerce-usuario:9",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:730335442778:task-definition/usuario-fargate-task:2",
     "containerDefinitions": [
         {
-            "name": "ecommerce-usuario",
-            "image": "730335442778.dkr.ecr.us-east-1.amazonaws.com/ecommerce-usuario:26",
+            "name": "my-container",
+            "image": "730335442778.dkr.ecr.us-east-1.amazonaws.com/ecommerce-usuario:latest",
             "cpu": 0,
+            "links": [],
             "portMappings": [
                 {
-                    "name": "8080",
                     "containerPort": 8080,
                     "hostPort": 8080,
-                    "protocol": "tcp",
-                    "appProtocol": "http"
+                    "protocol": "tcp"
                 }
             ],
             "essential": true,
+            "entryPoint": [],
+            "command": [],
             "environment": [],
+            "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
+            "secrets": [],
+            "dnsServers": [],
+            "dnsSearchDomains": [],
+            "extraHosts": [],
+            "dockerSecurityOptions": [],
+            "dockerLabels": {},
+            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-group": "/ecs/ecommerce-usuario",
-                    "awslogs-create-group": "true",
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
-                }
+                },
+                "secretOptions": []
             },
-            "systemControls": []
+            "systemControls": [],
+            "credentialSpecs": []
         }
     ],
-    "family": "ecommerce-usuario",
-    "executionRoleArn": "arn:aws:iam::730335442778:role/ecsTaskExecutionRole",
+    "family": "usuario-fargate-task",
+    "executionRoleArn": "arn:aws:iam::730335442778:role/ecommerce-usuario-ECSTaskExecutionRole-uz6sBgkwaGuV",
     "networkMode": "awsvpc",
-    "revision": 9,
+    "revision": 2,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -50,6 +60,9 @@
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
         },
         {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
+        },
+        {
             "name": "ecs.capability.execution-role-ecr-pull"
         },
         {
@@ -57,9 +70,6 @@
         },
         {
             "name": "ecs.capability.task-eni"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
         }
     ],
     "placementConstraints": [],
@@ -70,13 +80,9 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "cpu": "1024",
-    "memory": "3072",
-    "runtimePlatform": {
-        "cpuArchitecture": "X86_64",
-        "operatingSystemFamily": "LINUX"
-    },
-    "registeredAt": "2024-06-27T00:22:25.720Z",
+    "cpu": "256",
+    "memory": "512",
+    "registeredAt": "2024-06-28T18:31:40.368Z",
     "registeredBy": "arn:aws:iam::730335442778:user/teste",
     "tags": []
 }
