@@ -2,7 +2,7 @@
     "taskDefinitionArn": "arn:aws:ecs:us-east-1:730335442778:task-definition/usuario-fargate-task:2",
     "containerDefinitions": [
         {
-            "name": "my-container",
+            "name": "ecommerce-usuario",
             "image": "730335442778.dkr.ecr.us-east-1.amazonaws.com/ecommerce-usuario:latest",
             "cpu": 0,
             "links": [],
@@ -41,7 +41,7 @@
         }
     ],
     "family": "usuario-fargate-task",
-    "executionRoleArn": "arn:aws:iam::730335442778:role/ecommerce-usuario-ECSTaskExecutionRole-uz6sBgkwaGuV",
+    "executionRoleArn": "arn:aws:iam::730335442778:role/ecommerce-usuario-ECSTaskExecutionRole",
     "networkMode": "awsvpc",
     "revision": 2,
     "volumes": [],
